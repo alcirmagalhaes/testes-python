@@ -1,3 +1,6 @@
+import sys
+
+
 class Usuario:
 
     def __init__(self, nome):
@@ -20,7 +23,17 @@ class Leilao:
     def __init__(self, descricao):
         self.descricao = descricao
         self.__lances = []
+        self.menor_lance = sys.float_info.max
+        self.maior_lance = sys.float_info.min
+
+    def grava_lances(self, lance: Lance):
+        if lance.valor < self.menor_lance:
+            self.menor_lance = lance.valor
+        if lance.valor > self.maior_lance:
+            self.maior_lance = lance.valor
+
+        self.__lances.append(lance)
 
     @property
     def lances(self):
-        return self.__lances
+        return self.__lances[:]
