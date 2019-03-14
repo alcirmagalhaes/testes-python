@@ -1,3 +1,5 @@
+from src.leilao.excecao import LanceInvalido
+
 
 class Usuario:
 
@@ -14,9 +16,8 @@ class Usuario:
         return self.__carteira
 
     def propoe_lance(self, leilao, vlr_lance):
-
         if self._lance_maior_que_valor_carteira(vlr_lance):
-            raise ValueError('O usuário não pode dar um lance maior que o valor da sua carteira')
+            raise LanceInvalido('O usuário não pode dar um lance maior que o valor da sua carteira')
 
         lance = Lance(self, vlr_lance)
         leilao.grava_lances(lance)
@@ -62,11 +63,15 @@ class Leilao:
         return not self.__lances
 
     def _usuario_lance_atual_eh_diferente_do_ultimo_lance(self, lance):
-        return self.__lances[-1].usuario != lance.usuario
+        if lance.usuario != self.__lances[-1].usuario:
+            return True
+        raise LanceInvalido('Um usuário não pode dar dois lances seguidos')
 
     def _valor_lance_atual_eh_maior_que_ultimo_lance(self, lance):
-        return lance.valor > self.__lances[-1].valor
+        if lance.valor > self.__lances[-1].valor:
+            return True
+        raise LanceInvalido('O valor do lance deve ser maior que o lance anterior')
 
     def _eh_lance_valido(self, lance):
-        return self._nao_tem_lance() or (self._usuario_lance_atual_eh_diferente_do_ultimo_lance(lance)
-                                  and self._valor_lance_atual_eh_maior_que_ultimo_lance(lance))
+        return self._nao_tem_lance() or (self._usuario_lance_atual_eh_diferente_do_ultimo_lance(
+            lance) and self._valor_lance_atual_eh_maior_que_ultimo_lance(lance))

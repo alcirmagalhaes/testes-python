@@ -1,6 +1,8 @@
 from src.leilao.dominio import Usuario, Leilao
 import pytest
 
+from src.leilao.excecao import LanceInvalido
+
 
 @pytest.fixture
 def vini():
@@ -29,5 +31,5 @@ def test_deve_aceitar_lancamento_com_o_mesmo_valor_menor_que_o_da_carteira(vini,
 
 
 def test_nao_deve_aceitar_lancamento_maior_que_o_valor_da_carteira(vini, leilao):
-    with pytest.raises(ValueError):
+    with pytest.raises(LanceInvalido):
         vini.propoe_lance(leilao, 200.0)

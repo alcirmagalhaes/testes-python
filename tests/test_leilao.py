@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from src.leilao.dominio import Usuario, Leilao, Lance
+from src.leilao.excecao import LanceInvalido
 
 
 class TestLeilao(TestCase):
@@ -22,7 +23,7 @@ class TestLeilao(TestCase):
         self.assertEqual(vlr_maior_esperado, self.leilao.maior_lance)
 
     def test_nao_deve_aceitar_um_lance_menor_que_o_ultimo_dado(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(LanceInvalido):
             yuri = Usuario('yuri', 550.0)
             lance_do_yuri = Lance(yuri, 100.0)
             self.leilao.grava_lances(self.lance_do_gui)
@@ -69,7 +70,7 @@ class TestLeilao(TestCase):
     def test_deve_ignorar_lance_atual_desde_que_o_usuario_do_ultimo_lance_seja_igual_ao_atual(self):
 
         lance_do_gui300 = Lance(self.gui, 300.0)
-        with self.assertRaises(ValueError):
+        with self.assertRaises(LanceInvalido):
             self.leilao.grava_lances(self.lance_do_gui)
             self.leilao.grava_lances(lance_do_gui300)
 
